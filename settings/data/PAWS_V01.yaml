@@ -1,0 +1,10 @@
+name: PAWS
+dir: resource/dataset/PAWS_V01/
+
+folds: [0,1,2,3,4]
+
+st1_max_length: 64
+st2_max_length: 64
+
+batch_size: 64
+num_workers: 12

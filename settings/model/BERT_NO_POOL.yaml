@@ -1,13 +1,13 @@
 name: BERT_NO_POOL
 
-desc_encoder:
+st1_encoder:
   _target_: source.encoder.BertEncoder.BertEncoder
   architecture: bert-base-uncased
   output_attentions: False
   pooling:
     _target_: source.pooling.NoPooling.NoPooling
 
-code_encoder:
+st2_encoder:
   _target_: source.encoder.BertEncoder.BertEncoder
   architecture: bert-base-uncased
   output_attentions: False
@@ -16,11 +16,11 @@ code_encoder:
 
 hidden_size: 768
 
-desc_tokenizer:
-  architecture: ${model.desc_encoder.architecture}
+st1_tokenizer:
+  architecture: ${model.st1_encoder.architecture}
 
-code_tokenizer:
-  architecture: ${model.code_encoder.architecture}
+st2_tokenizer:
+  architecture: ${model.st2_encoder.architecture}
 
 lr: 1e-5
 base_lr: 1e-7
@@ -28,8 +28,8 @@ max_lr: 1e-3
 weight_decay: 1e-2
 
 loss:
-  _target_: source.loss.NPairsLoss.NPairsLoss
-  name: N-Pair-Loss
+  _target_: source.loss.CosineEmbeddingLoss.CosineEmbeddingLoss
+  name: CossineEmbeddingLoss
 
 stat:
   dir: resource/stat/

@@ -1,8 +1,8 @@
 defaults:
   - model: BERT_NO_POOL
-  - data: JAVA
+  - data: PAWS_V01
 
-tasks: [ "eval" ]
+tasks: [ "fit" ]
 
 trainer:
   max_epochs: 16

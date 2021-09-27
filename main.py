@@ -7,14 +7,13 @@ import torch
 from omegaconf import OmegaConf
 import pytorch_lightning as pl
 from pytorch_lightning import loggers
-from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping, LearningRateMonitor
+from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from transformers import AutoTokenizer
 
-from source.DataModule.CoEncoderDataModule import CoEncoderDataModule
+from source.DataModule.PawsDataModule import PawsDataModule
 from source.callback.PredictionWriter import PredictionWriter
 from source.helper.EvalHelper import EvalHelper
-from source.helper.ExpHelper import get_sample
-from source.model.CoEncoderModel import CoEncoderModel
+from source.model.CoModel import CoModel
 
 
 def get_logger(params, fold):
@@ -72,11 +71,11 @@ def fit(params):
         )
         # Train the ⚡ model
         trainer.fit(
-            model=CoEncoderModel(params.model),
-            datamodule=CoEncoderDataModule(
+            model=CoModel(params.model),
+            datamodule=PawsDataModule(
                 params.data,
-                get_tokenizer(params.model.desc_tokenizer),
-                get_tokenizer(params.model.code_tokenizer),
+                get_tokenizer(params.model.st1_tokenizer),
+                get_tokenizer(params.model.st2_tokenizer),
                 fold=fold)
         )
 
@@ -85,14 +84,14 @@ def fit(params):
 def predict(params):
     for fold in params.data.folds:
         # data
-        dm = CoEncoderDataModule(
+        dm = PawsDataModule(
                 params.data,
-                get_tokenizer(params.model.desc_tokenizer),
-                get_tokenizer(params.model.code_tokenizer),
+                get_tokenizer(params.model.st1_tokenizer),
+                get_tokenizer(params.model.st2_tokenizer),
                 fold=fold)
 
         # model
-        model = CoEncoderModel.load_from_checkpoint(
+        model = CoModel.load_from_checkpoint(
             checkpoint_path=f"{params.model_checkpoint.dir}{params.model.name}_{params.data.name}_{fold}.ckpt"
         )
 
@@ -125,7 +124,7 @@ def eval(params):
 def explain(hparams):
     print("using the following parameters:\n", OmegaConf.to_yaml(hparams))
     # override some of the params with new values
-    model = CoEncoderModel.load_from_checkpoint(
+    model = CoModel.load_from_checkpoint(
         checkpoint_path=hparams.model_checkpoint.dir + hparams.model.name + "_" + hparams.data.name + ".ckpt",
         **hparams.model
     )
@@ -134,8 +133,8 @@ def explain(hparams):
     x1_tokenizer = get_tokenizer(hparams.model)
     x2_tokenizer = x1_tokenizer
 
-    x1_length = hparams.data.desc_max_length
-    x2_length = hparams.data.code_max_length
+    x1_length = hparams.data.st1_max_length
+    x2_length = hparams.data.st2_max_length
 
     desc, code = get_sample(
         hparams.attentions.sample_id,
@@ -180,8 +179,8 @@ def sim(hparams):
     x1_tokenizer = get_tokenizer(hparams.model)
     x2_tokenizer = x1_tokenizer
 
-    x1_length = hparams.data.desc_max_length
-    x2_length = hparams.data.code_max_length
+    x1_length = hparams.data.st1_max_length
+    x2_length = hparams.data.st2_max_length
 
     desc, code = get_sample(
         hparams.attentions.sample_id,
