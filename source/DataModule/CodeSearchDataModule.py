@@ -3,19 +3,19 @@ import pickle
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 
-from source.Dataset.PawsDataset import PawsDataset
+from source.Dataset.CodeSearchDataset import CodeSearchDataset
 
 
-class PawsDataModule(pl.LightningDataModule):
+class CodeSearchDataModule(pl.LightningDataModule):
     """
     Paws DataModule
     """
 
-    def __init__(self, params, st1_tokenizer, st2_tokenizer, fold):
-        super(PawsDataModule, self).__init__()
+    def __init__(self, params, desc_tokenizer, code_tokenizer, fold):
+        super(CodeSearchDataModule, self).__init__()
         self.params = params
-        self.st1_tokenizer = st1_tokenizer
-        self.st2_tokenizer = st2_tokenizer
+        self.desc_tokenizer = desc_tokenizer
+        self.code_tokenizer = code_tokenizer
         self.fold = fold
 
     def prepare_data(self):
@@ -25,32 +25,32 @@ class PawsDataModule(pl.LightningDataModule):
     def setup(self, stage=None):
 
         if stage == 'fit':
-            self.train_dataset = PawsDataset(
+            self.train_dataset = CodeSearchDataset(
                 samples=self.samples,
                 ids_path=self.params.dir + f"fold_{self.fold}/train.pkl",
-                st1_tokenizer=self.st1_tokenizer,
-                st2_tokenizer=self.st2_tokenizer,
-                st1_max_length=self.params.st1_max_length,
-                st2_max_length=self.params.st2_max_length
+                desc_tokenizer=self.desc_tokenizer,
+                code_tokenizer=self.code_tokenizer,
+                desc_max_length=self.params.desc_max_length,
+                code_max_length=self.params.code_max_length
             )
 
-            self.val_dataset = PawsDataset(
+            self.val_dataset = CodeSearchDataset(
                 samples=self.samples,
                 ids_path=self.params.dir + f"fold_{self.fold}/val.pkl",
-                st1_tokenizer=self.st1_tokenizer,
-                st2_tokenizer=self.st2_tokenizer,
-                st1_max_length=self.params.st1_max_length,
-                st2_max_length=self.params.st2_max_length
+                desc_tokenizer=self.desc_tokenizer,
+                code_tokenizer=self.code_tokenizer,
+                desc_max_length=self.params.desc_max_length,
+                code_max_length=self.params.code_max_length
             )
 
         if stage == 'test' or stage is "predict":
-            self.test_dataset = PawsDataset(
+            self.test_dataset = CodeSearchDataset(
                 samples=self.samples,
                 ids_path=self.params.dir + f"fold_{self.fold}/val.pkl",
-                st1_tokenizer=self.st1_tokenizer,
-                st2_tokenizer=self.st2_tokenizer,
-                st1_max_length=self.params.st1_max_length,
-                st2_max_length=self.params.st2_max_length
+                desc_tokenizer=self.desc_tokenizer,
+                code_tokenizer=self.code_tokenizer,
+                desc_max_length=self.params.desc_max_length,
+                code_max_length=self.params.code_max_length
             )
 
     def train_dataloader(self):

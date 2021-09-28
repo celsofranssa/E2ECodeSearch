@@ -1,6 +1,6 @@
 defaults:
-  - model: BERT_NO_POOL
-  - data: PAWS_V01
+  - model: CLM_NO_POOL
+  - data: JAVA
 
 tasks: [ "fit" ]
 

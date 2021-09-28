@@ -1,15 +1,15 @@
 name: BERT_NO_POOL
 
 desc_encoder:
-  _target_: source.encoder.BertEncoder.BertEncoder
-  architecture: bert-base-uncased
+  _target_: source.encoder.CLMEncoder.CLMEncoder
+  architecture: microsoft/codebert-base
   output_attentions: False
   pooling:
     _target_: source.pooling.NoPooling.NoPooling
 
 code_encoder:
-  _target_: source.encoder.BertEncoder.BertEncoder
-  architecture: bert-base-uncased
+  _target_: source.encoder.CLMEncoder.CLMEncoder
+  architecture: microsoft/codebert-base
   output_attentions: False
   pooling:
     _target_: source.pooling.NoPooling.NoPooling
