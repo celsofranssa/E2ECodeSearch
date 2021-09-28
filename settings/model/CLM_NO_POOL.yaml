@@ -1,4 +1,4 @@
-name: BERT_NO_POOL
+name: CLM_NO_POOL
 
 desc_encoder:
   _target_: source.encoder.CLMEncoder.CLMEncoder
