@@ -31,7 +31,7 @@ class ESOModel(LightningModule):
         code_repr = self.code_encoder(code)
         return desc_repr, code_repr
 
-    def training_step(self, batch, batch_idx, optimizer_idx):
+    def training_step(self, batch, batch_idx):
         desc, code, cls = batch["desc"], batch["code"], batch["cls"]
         desc_repr, code_repr = self(desc, code)
         train_loss=self.loss(desc_repr, code_repr, cls)
