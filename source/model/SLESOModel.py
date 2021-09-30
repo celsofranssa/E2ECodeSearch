@@ -42,7 +42,7 @@ class SLESOModel(LightningModule):
     def validation_step(self, batch, batch_idx):
         desc, code, cls = batch["desc"], batch["code"], batch["cls"]
         desc_repr, code_repr = self(desc, code)
-        self.log("val_MRR", self.mrr(desc_repr, code_repr), prog_bar=True)
+        self.log("val_MRR", self.mrr(desc_repr, code_repr, cls), prog_bar=True)
         self.log("val_LOSS", self.loss(desc_repr, code_repr, cls), prog_bar=True)
 
     def validation_epoch_end(self, outs):
@@ -62,7 +62,7 @@ class SLESOModel(LightningModule):
     def test_step(self, batch, batch_idx):
         desc, code, cls = batch["desc"], batch["code"], batch["cls"]
         desc_repr, code_repr = self(desc, code)
-        self.log("test_MRR", self.mrr(desc_repr, code_repr), prog_bar=True)
+        self.log("test_MRR", self.mrr(desc_repr, code_repr, cls), prog_bar=True)
 
     def test_epoch_end(self, outs):
         self.mrr.compute()
