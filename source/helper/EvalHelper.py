@@ -88,7 +88,7 @@ class EvalHelper:
 
         for prediction in tqdm(predictions, desc="Indexing"):
             if prediction.get("cls",1)==1:
-                index.addDataPoint(id=prediction["idx"], data=prediction["st2_rpr"])
+                index.addDataPoint(id=prediction["idx"], data=prediction["code_repr"])
 
         index.createIndex(index_time_params)
         return index
@@ -99,7 +99,7 @@ class EvalHelper:
         for prediction in tqdm(predictions, desc="Searching"):
             if prediction.get("cls",1)==1:
                 target_idx = prediction["idx"]
-                ids, distances = index.knnQuery(prediction["st1_rpr"], k=k)
+                ids, distances = index.knnQuery(prediction["desc_repr"], k=k)
                 ids = ids.tolist()
                 if target_idx in ids:
                     ranking[target_idx] = ids.index(target_idx) + 1

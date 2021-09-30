@@ -27,15 +27,15 @@ class ULPredictionWriter(BasePredictionWriter):
 
         for idx, desc_repr, code_repr in zip(
                 prediction["idx"].tolist(),
-                prediction["desc_rpr"].tolist(),
-                prediction["code_rpr"].tolist()
+                prediction["desc_repr"].tolist(),
+                prediction["code_repr"].tolist()
         ):
 
 
             predictions.append({
                 "idx": idx,
-                "desc_rpr": desc_repr,
-                "code_rpr": code_repr
+                "desc_repr": desc_repr,
+                "code_repr": code_repr
             })
 
         self._checkpoint(predictions, dataloader_idx, batch_idx)
