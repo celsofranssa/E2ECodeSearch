@@ -6,11 +6,11 @@ from pytorch_lightning.callbacks import BasePredictionWriter
 from torch import Tensor
 
 
-class PredictionWriter(BasePredictionWriter):
+class SLPredictionWriter(BasePredictionWriter):
 
 
     def __init__(self, params):
-        super(PredictionWriter, self).__init__(params.write_interval)
+        super(SLPredictionWriter, self).__init__(params.write_interval)
         self.params=params
 
     def write_on_epoch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule", predictions: Sequence[Any],
@@ -25,7 +25,7 @@ class PredictionWriter(BasePredictionWriter):
 
         predictions = []
 
-        for idx, st1_repr, st2_repr, cls in zip(
+        for idx, desc_repr, code_repr, cls in zip(
                 prediction["idx"].tolist(),
                 prediction["desc_rpr"].tolist(),
                 prediction["code_rpr"].tolist(),
@@ -35,8 +35,8 @@ class PredictionWriter(BasePredictionWriter):
 
             predictions.append({
                 "idx": idx,
-                "desc_rpr": st1_repr,
-                "code_rpr": st2_repr,
+                "desc_rpr": desc_repr,
+                "code_rpr": code_repr,
                 "cls": cls
             })
 

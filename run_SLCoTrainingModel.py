@@ -9,7 +9,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from transformers import AutoTokenizer
 
 from source.DataModule.SLDataModule import SLDataModule
-from source.callback.PredictionWriter import PredictionWriter
+from source.callback.SLPredictionWriter import SLPredictionWriter
 from source.helper.EvalHelper import EvalHelper
 from source.model.SLCoTrainingModel import SLCoTrainingModel
 
@@ -97,7 +97,7 @@ def predict(params):
         # trainer
         trainer = pl.Trainer(
             gpus=params.trainer.gpus,
-            callbacks=[PredictionWriter(params.prediction)]
+            callbacks=[SLPredictionWriter(params.prediction)]
         )
 
         # predicting

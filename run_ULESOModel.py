@@ -10,7 +10,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from transformers import AutoTokenizer
 
 from source.DataModule.ULDataModule import ULDataModule
-from source.callback.PredictionWriter import PredictionWriter
+from source.callback.ULPredictionWriter import ULPredictionWriter
 from source.helper.EvalHelper import EvalHelper
 from source.model.ULESOModel import ULESOModel
 
@@ -98,7 +98,7 @@ def predict(params):
         # trainer
         trainer = pl.Trainer(
             gpus=params.trainer.gpus,
-            callbacks=[PredictionWriter(params.prediction)]
+            callbacks=[ULPredictionWriter(params.prediction)]
         )
 
         # predicting
