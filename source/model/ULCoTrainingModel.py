@@ -4,7 +4,7 @@ import torch
 from pytorch_lightning.core.lightning import LightningModule
 from hydra.utils import instantiate
 
-from source.metric.MRRMetric import MRRMetric
+from source.metric.ULMRRMetric import ULMRRMetric
 
 
 class ULCoTrainingModel(LightningModule):
@@ -23,7 +23,7 @@ class ULCoTrainingModel(LightningModule):
         self.loss = instantiate(hparams.loss)
 
         # metric
-        self.mrr = MRRMetric()
+        self.mrr = ULMRRMetric()
 
 
     def forward(self, desc, code):

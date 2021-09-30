@@ -2,7 +2,7 @@ import torch
 from torchmetrics import Metric
 
 
-class MRRMetric(Metric):
+class SLMRRMetric(Metric):
     def __init__(self):
         super().__init__()
         self.add_state("mrrs", default=[])
@@ -20,10 +20,11 @@ class MRRMetric(Metric):
         x2 = x2 / torch.norm(x2, dim=1, p=2, keepdim=True, dtype=torch.float32)
         return torch.matmul(x1, x2.t())
 
-    def update(self, r1, r2):
+    def update(self, r1, r2, cls):
         distances = 1 - self.similarities(r1, r2)
         correct_elements = torch.unsqueeze(torch.diag(distances), dim=-1)
         batch_ranks = torch.sum(distances < correct_elements, dim=-1) + 1.0
+        batch_ranks = batch_ranks[cls[:, 0] == 1]
         self.mrrs.append(torch.mean(1.0 / batch_ranks))
 
     def compute(self):

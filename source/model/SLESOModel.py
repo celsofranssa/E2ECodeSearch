@@ -4,7 +4,7 @@ import torch
 from pytorch_lightning.core.lightning import LightningModule
 from hydra.utils import instantiate
 
-from source.metric.MRRMetric import MRRMetric
+from source.metric.SLMRRMetric import SLMRRMetric
 
 
 class SLESOModel(LightningModule):
@@ -23,7 +23,7 @@ class SLESOModel(LightningModule):
         self.loss = instantiate(hparams.loss)
 
         # metric
-        self.mrr = MRRMetric()
+        self.mrr = SLMRRMetric()
 
 
     def forward(self, desc, code):
