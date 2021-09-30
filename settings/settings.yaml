@@ -1,6 +1,6 @@
 defaults:
   - model: CLM_NO_POOL
-  - data: JAVA
+  - data: JAVA_V01
 
 tasks: [ "fit" ]
 
