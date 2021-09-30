@@ -87,7 +87,8 @@ class EvalHelper:
         index = nmslib.init(method='hnsw', space='cosinesimil')
 
         for prediction in tqdm(predictions, desc="Indexing"):
-            index.addDataPoint(id=prediction["idx"], data=prediction["st2_rpr"])
+            if "cls" in prediction and prediction["cls"]==1:
+                index.addDataPoint(id=prediction["idx"], data=prediction["st2_rpr"])
 
         index.createIndex(index_time_params)
         return index
@@ -96,13 +97,14 @@ class EvalHelper:
         # retrieve
         ranking = {}
         for prediction in tqdm(predictions, desc="Searching"):
-            target_idx = prediction["idx"]
-            ids, distances = index.knnQuery(prediction["st1_rpr"], k=k)
-            ids = ids.tolist()
-            if target_idx in ids:
-                ranking[target_idx] = ids.index(target_idx) + 1
-            else:
-                ranking[target_idx] = 1e9
+            if "cls" in prediction and prediction["cls"] == 1:
+                target_idx = prediction["idx"]
+                ids, distances = index.knnQuery(prediction["st1_rpr"], k=k)
+                ids = ids.tolist()
+                if target_idx in ids:
+                    ranking[target_idx] = ids.index(target_idx) + 1
+                else:
+                    ranking[target_idx] = 1e9
         return ranking
 
     def get_ranking(self, k, fold):
