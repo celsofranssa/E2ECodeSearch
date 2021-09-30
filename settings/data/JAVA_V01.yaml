@@ -1,0 +1,10 @@
+name: JAVA_V01
+dir: resource/dataset/java_v01/
+
+folds: [0,1,2,3,4]
+
+desc_max_length: 32
+code_max_length: 128
+
+batch_size: 32
+num_workers: 12

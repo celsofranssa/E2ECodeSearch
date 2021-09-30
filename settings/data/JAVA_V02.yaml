@@ -1,5 +1,5 @@
-name: JAVA
-dir: resource/dataset/java/
+name: JAVA_V01
+dir: resource/dataset/java_v02/
 
 folds: [0,1,2,3,4]
 
