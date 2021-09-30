@@ -3,7 +3,7 @@ import pickle
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 
-from source.Dataset.SLDataset import CodeSearchDataset
+from source.Dataset.ULDataset import ULDataset
 
 
 class ULDataModule(pl.LightningDataModule):
@@ -34,7 +34,7 @@ class ULDataModule(pl.LightningDataModule):
                 code_max_length=self.params.code_max_length
             )
 
-            self.val_dataset = CodeSearchDataset(
+            self.val_dataset = ULDataset(
                 samples=self.samples,
                 ids_path=self.params.dir + f"fold_{self.fold}/val.pkl",
                 desc_tokenizer=self.desc_tokenizer,
@@ -44,7 +44,7 @@ class ULDataModule(pl.LightningDataModule):
             )
 
         if stage == 'test' or stage is "predict":
-            self.test_dataset = CodeSearchDataset(
+            self.test_dataset = ULDataset(
                 samples=self.samples,
                 ids_path=self.params.dir + f"fold_{self.fold}/val.pkl",
                 desc_tokenizer=self.desc_tokenizer,
