@@ -28,8 +28,8 @@ max_lr: 1e-3
 weight_decay: 1e-2
 
 loss:
-  _target_: source.loss.CosineEmbeddingLoss.CosineEmbeddingLoss
-  name: CossineEmbeddingLoss
+  _target_: source.loss.NPairsLoss.NPairsLoss
+  name: NPairsLoss
 
 stat:
   dir: resource/stat/
