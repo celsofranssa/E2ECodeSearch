@@ -49,8 +49,8 @@ class ULSLCoTrainingModel(LightningModule):
         desc_repr, code_repr = self(desc, code)
 
         # log losses
-        self.log("val_desc_LOSS", self.x1_loss(desc_repr, code_repr), prog_bar=True)
-        self.log("val_code_LOSS", self.x2_loss(desc_repr, code_repr), prog_bar=True)
+        self.log("val_desc_LOSS", self.loss(desc_repr, code_repr), prog_bar=True)
+        self.log("val_code_LOSS", self.loss(desc_repr, code_repr), prog_bar=True)
 
         # log MRR
         self.log("val_MRR", self.mrr(desc_repr, code_repr), prog_bar=True)
@@ -103,7 +103,7 @@ class ULSLCoTrainingModel(LightningModule):
 
         return (
             {"optimizer": desc_optimizer, "lr_scheduler": desc_scheduler, "frequency": 1},
-            {"optimizer": desc_optimizer, "lr_scheduler": code_scheduler, "frequency": 1},
+            {"optimizer": code_optimizer, "lr_scheduler": code_scheduler, "frequency": 1},
         )
 
 

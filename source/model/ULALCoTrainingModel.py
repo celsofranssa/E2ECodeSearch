@@ -1,5 +1,3 @@
-import importlib
-
 import torch
 from pytorch_lightning.core.lightning import LightningModule
 from hydra.utils import instantiate
@@ -74,7 +72,7 @@ class ULALCoTrainingModel(LightningModule):
 
         return (
             {"optimizer": desc_optimizer, "lr_scheduler": desc_scheduler, "frequency": 1},
-            {"optimizer": desc_optimizer, "lr_scheduler": code_scheduler, "frequency": 1},
+            {"optimizer": code_optimizer, "lr_scheduler": code_scheduler, "frequency": 1},
         )
 
     @property

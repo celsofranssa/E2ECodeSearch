@@ -11,7 +11,7 @@ trainer:
   min_delta: 0.05
   precision: 16
   fast_dev_run: False
-  progress_bar_refresh_rate: 1
+  progress_bar_refresh_rate: 20
 
 log:
   dir: resource/log/
