@@ -51,6 +51,9 @@ class ULALCoTrainingModel(LightningModule):
         self.log("val_desc_LOSS", self.desc_loss(desc_repr, code_repr), prog_bar=True)
         self.log("val_code_LOSS", self.code_loss(code_repr, desc_repr), prog_bar=True)
 
+        # log MRR
+        self.log("val_MRR", self.mrr(desc_repr, code_repr))
+
     def configure_optimizers(self):
         # optimizers
         desc_optimizer = torch.optim.AdamW(self.desc_encoder.parameters(), lr=self.hparams.lr, betas=(0.9, 0.999),
