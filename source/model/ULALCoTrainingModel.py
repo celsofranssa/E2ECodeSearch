@@ -54,6 +54,33 @@ class ULALCoTrainingModel(LightningModule):
         # log MRR
         self.log("val_MRR", self.mrr(desc_repr, code_repr), prog_bar=True)
 
+    def validation_epoch_end(self, outs):
+        self.mrr.compute()
+
+    def predict_step(self, batch, batch_idx, dataloader_idx=None):
+        idx, desc, code = batch["idx"], batch["desc"], batch["code"]
+        desc_repr, code_repr = self(desc, code)
+
+        return {
+            "idx": idx,
+            "desc_repr": desc_repr,
+            "code_repr": code_repr
+        }
+
+    def test_step(self, batch, batch_idx):
+        desc, code = batch["desc"], batch["code"]
+        desc_repr, code_repr = self(desc, code)
+        self.log("test_MRR", self.mrr(desc_repr, code_repr), prog_bar=True)
+
+    def test_epoch_end(self, outs):
+        self.mrr.compute()
+
+    def get_desc_encoder(self):
+        return self.desc_encoder
+
+    def get_code_encoder(self):
+        return self.desc_encoder
+
     def configure_optimizers(self):
         # optimizers
         desc_optimizer = torch.optim.AdamW(self.desc_encoder.parameters(), lr=self.hparams.lr, betas=(0.9, 0.999),
