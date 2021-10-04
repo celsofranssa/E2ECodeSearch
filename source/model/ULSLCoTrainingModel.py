@@ -50,7 +50,7 @@ class ULSLCoTrainingModel(LightningModule):
 
         # log losses
         self.log("val_desc_LOSS", self.loss(desc_repr, code_repr), prog_bar=True)
-        self.log("val_code_LOSS", self.loss(desc_repr, code_repr), prog_bar=True)
+        self.log("val_code_LOSS", self.loss(code_repr, desc_repr), prog_bar=True)
 
         # log MRR
         self.log("val_MRR", self.mrr(desc_repr, code_repr), prog_bar=True)
