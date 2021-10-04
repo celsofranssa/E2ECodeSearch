@@ -52,7 +52,7 @@ class ULALCoTrainingModel(LightningModule):
         self.log("val_code_LOSS", self.code_loss(code_repr, desc_repr), prog_bar=True)
 
         # log MRR
-        self.log("val_MRR", self.mrr(desc_repr, code_repr))
+        self.log("val_MRR", self.mrr(desc_repr, code_repr), prog_bar=True)
 
     def configure_optimizers(self):
         # optimizers

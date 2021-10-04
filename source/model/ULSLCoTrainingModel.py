@@ -53,7 +53,7 @@ class ULSLCoTrainingModel(LightningModule):
         self.log("val_code_LOSS", self.loss(code_repr, desc_repr), prog_bar=True)
 
         # log MRR
-        self.log("val_MRR", self.mrr(desc_repr, code_repr))
+        self.log("val_MRR", self.mrr(desc_repr, code_repr), prog_bar=True)
 
     def validation_epoch_end(self, outs):
         self.mrr.compute()
