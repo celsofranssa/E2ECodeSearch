@@ -1,7 +1,5 @@
 name: CLM_NO_POOL
 
-_target_: source.encoder.CLMEncoder.CLMEncoder
-
 desc_encoder:
   _target_: source.encoder.CLMEncoder.CLMEncoder
   architecture: microsoft/codebert-base
@@ -30,8 +28,8 @@ max_lr: 1e-3
 weight_decay: 1e-2
 
 loss:
-  _target_: source.loss.NPairsLoss.NPairsLoss
-  name: NPairsLoss
+  _target_: source.loss.AsMNRankingLoss.AsMNRankingLoss
+  name: AsMNRankingLoss
 
 stat:
   dir: resource/stat/

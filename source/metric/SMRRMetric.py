@@ -2,7 +2,7 @@ import torch
 from torchmetrics import Metric
 
 
-class SLMRRMetric(Metric):
+class SMRRMetric(Metric):
     def __init__(self):
         super().__init__()
         self.add_state("mrrs", default=[])
@@ -16,8 +16,8 @@ class SLMRRMetric(Metric):
         :param x2: a tensors with shape [batch_size, hidden_size].
         :return: the cosine similarity matrix with shape [batch_size, batch_size].
         """
-        x1 = x1 / torch.norm(x1, dim=1, p=2, keepdim=True, dtype=torch.float32)
-        x2 = x2 / torch.norm(x2, dim=1, p=2, keepdim=True, dtype=torch.float32)
+        x1 = x1 / torch.norm(x1, dim=1, p=2, keepdim=True)
+        x2 = x2 / torch.norm(x2, dim=1, p=2, keepdim=True)
         return torch.matmul(x1, x2.t())
 
     def update(self, r1, r2, cls):

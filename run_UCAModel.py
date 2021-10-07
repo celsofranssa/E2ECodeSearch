@@ -1,5 +1,4 @@
 
-
 import hydra
 import os
 
@@ -12,7 +11,7 @@ from transformers import AutoTokenizer
 from source.DataModule.ULDataModule import ULDataModule
 from source.callback.ULPredictionWriter import ULPredictionWriter
 from source.helper.EvalHelper import EvalHelper
-from source.model.ULESOModel import ULESOModel
+from source.model.UCAModel import UCAModel
 
 
 def get_logger(params, fold):
@@ -70,7 +69,7 @@ def fit(params):
         )
         # Train the ⚡ model
         trainer.fit(
-            model=ULESOModel(params.model),
+            model=UCAModel(params.model),
             datamodule=ULDataModule(
                 params.data,
                 get_tokenizer(params.model.desc_tokenizer),
@@ -90,7 +89,7 @@ def predict(params):
                 fold=fold)
 
         # model
-        model = ULESOModel.load_from_checkpoint(
+        model = UCAModel.load_from_checkpoint(
             checkpoint_path=f"{params.model_checkpoint.dir}{params.model.name}_{params.data.name}_{fold}.ckpt"
         )
 
@@ -131,6 +130,7 @@ def perform_tasks(params):
         predict(params)
     if "eval" in params.tasks:
         eval(params)
+
 
 
 if __name__ == '__main__':

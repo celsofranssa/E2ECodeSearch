@@ -11,7 +11,7 @@ from transformers import AutoTokenizer
 from source.DataModule.ULDataModule import ULDataModule
 from source.callback.ULPredictionWriter import ULPredictionWriter
 from source.helper.EvalHelper import EvalHelper
-from source.model.ULCoTrainingModel import ULCoTrainingModel
+from source.model.UCSModel import UCSModel
 
 
 def get_logger(params, fold):
@@ -69,7 +69,7 @@ def fit(params):
         )
         # Train the ⚡ model
         trainer.fit(
-            model=ULCoTrainingModel(params.model),
+            model=UCSModel(params.model),
             datamodule=ULDataModule(
                 params.data,
                 get_tokenizer(params.model.desc_tokenizer),
@@ -89,7 +89,7 @@ def predict(params):
                 fold=fold)
 
         # model
-        model = ULCoTrainingModel.load_from_checkpoint(
+        model = UCSModel.load_from_checkpoint(
             checkpoint_path=f"{params.model_checkpoint.dir}{params.model.name}_{params.data.name}_{fold}.ckpt"
         )
 

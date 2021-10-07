@@ -2,17 +2,15 @@ import torch
 from pytorch_lightning.core.lightning import LightningModule
 from hydra.utils import instantiate
 
-from source.metric.ULMRRMetric import ULMRRMetric
+from source.metric.UMRRMetric import UMRRMetric
 
 
-class ULALCoTrainingModel(LightningModule):
-    """
-        Unsupervised Learning with Asymmetric Loss Co-Training Model
-        """
+class UCAModel(LightningModule):
+    """Unsupervised CoTraining Model."""
 
     def __init__(self, hparams):
 
-        super(ULALCoTrainingModel, self).__init__()
+        super(UCAModel, self).__init__()
         self.save_hyperparameters(hparams)
 
         # encoders
@@ -20,11 +18,10 @@ class ULALCoTrainingModel(LightningModule):
         self.code_encoder = instantiate(hparams.code_encoder)
 
         # loss function
-        self.desc_loss = instantiate(hparams.loss)
-        self.code_loss = instantiate(hparams.loss)
+        self.loss = instantiate(hparams.loss)
 
         # metric
-        self.mrr = ULMRRMetric()
+        self.mrr = UMRRMetric()
 
 
     def forward(self, desc, code):
@@ -37,22 +34,20 @@ class ULALCoTrainingModel(LightningModule):
         desc_repr, code_repr = self(desc, code)
         if optimizer_idx == 0:
             # loss concerning x1_encoder
-            desc_loss=self.desc_loss(desc_repr, code_repr)
-            return desc_loss
+            train_loss = self.loss(desc_repr, code_repr)
+            self.log("train_LOSS", train_loss)
+            return train_loss
         if optimizer_idx == 1:
             # loss concerning x2_encoder
-            code_loss = self.code_loss(code_repr, desc_repr)
-            return code_loss
-
+            train_loss = self.loss(code_repr, desc_repr)
+            self.log("train_LOSS", train_loss)
+            return train_loss
 
     def validation_step(self, batch, batch_idx):
         desc, code = batch["desc"], batch["code"]
         desc_repr, code_repr = self(desc, code)
-        self.log("val_desc_LOSS", self.desc_loss(desc_repr, code_repr), prog_bar=True)
-        self.log("val_code_LOSS", self.code_loss(code_repr, desc_repr), prog_bar=True)
-
-        # log MRR
         self.log("val_MRR", self.mrr(desc_repr, code_repr), prog_bar=True)
+        self.log("val_LOSS", self.loss(desc_repr, code_repr), prog_bar=True)
 
     def validation_epoch_end(self, outs):
         self.mrr.compute()
@@ -104,6 +99,7 @@ class ULALCoTrainingModel(LightningModule):
             {"optimizer": desc_optimizer, "lr_scheduler": desc_scheduler, "frequency": 1},
             {"optimizer": code_optimizer, "lr_scheduler": code_scheduler, "frequency": 1},
         )
+
 
     @property
     def num_training_steps(self) -> int:
