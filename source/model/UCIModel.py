@@ -5,12 +5,12 @@ from hydra.utils import instantiate
 from source.metric.UMRRMetric import UMRRMetric
 
 
-class UCAModel(LightningModule):
-    """Unsupervised Model with Co-Training and Asymmetric Loss"""
+class UCIModel(LightningModule):
+    """Unsupervised Model with Co-Training and Inverted-Asymmetric Loss"""
 
     def __init__(self, hparams):
 
-        super(UCAModel, self).__init__()
+        super(UCIModel, self).__init__()
         self.save_hyperparameters(hparams)
 
         # encoders
@@ -34,12 +34,12 @@ class UCAModel(LightningModule):
         desc_repr, code_repr = self(desc, code)
         if optimizer_idx == 0:
             # loss concerning x1_encoder
-            train_loss = self.loss(desc_repr, code_repr)
+            train_loss = self.loss(code_repr, desc_repr)
             self.log("train_LOSS", train_loss)
             return train_loss
         if optimizer_idx == 1:
             # loss concerning x2_encoder
-            train_loss = self.loss(code_repr, desc_repr)
+            train_loss = self.loss(desc_repr, code_repr)
             self.log("train_LOSS", train_loss)
             return train_loss
 
