@@ -4,7 +4,7 @@ from torch import nn
 
 class MarginLoss(nn.Module):
 
-    def __init__(self):
+    def __init__(self, name):
         super(MarginLoss, self).__init__()
         self.mse = nn.MSELoss()
 
