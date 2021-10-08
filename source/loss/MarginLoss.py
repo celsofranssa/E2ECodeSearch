@@ -21,7 +21,9 @@ class MarginLoss(nn.Module):
 
     def forward(self, r1, r2):
         scores = self.cos_sim(r1, r2)
-        target = 2 * torch.eye(r1.shape[-1]) - 1
+        target = 2 * torch.eye(r1.shape[0],device=r1.device) - 1
+        print(f"scores({scores.shape}):\n {scores}\n\n")
+        print(f"target({target.shape}):\n {target}\n\n")
         return self.mse(scores, target)
 
 
