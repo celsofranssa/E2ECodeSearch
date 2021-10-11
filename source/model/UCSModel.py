@@ -90,8 +90,8 @@ class UCSModel(LightningModule):
                                                            cycle_momentum=False)
 
         return (
-            {"optimizer": desc_optimizer, "lr_scheduler": desc_scheduler, "frequency": 1},
-            {"optimizer": code_optimizer, "lr_scheduler": code_scheduler, "frequency": 1},
+            {"optimizer": desc_optimizer, "lr_scheduler": desc_scheduler, "frequency": self.hparams.desc_frequency_opt},
+            {"optimizer": code_optimizer, "lr_scheduler": code_scheduler, "frequency": self.hparams.code_frequency_opt},
         )
 
 
