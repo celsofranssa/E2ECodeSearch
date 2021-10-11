@@ -35,12 +35,12 @@ class UCAModel(LightningModule):
         if optimizer_idx == 0:
             # loss concerning x1_encoder
             train_loss = self.loss(desc_repr, code_repr)
-            self.log("train_LOSS", train_loss)
+            self.log("desc_LOSS", train_loss, prog_bar=True)
             return train_loss
         if optimizer_idx == 1:
             # loss concerning x2_encoder
             train_loss = self.loss(code_repr, desc_repr)
-            self.log("train_LOSS", train_loss)
+            self.log("code_LOSS", train_loss, prog_bar=True)
             return train_loss
 
     def validation_step(self, batch, batch_idx):
