@@ -32,6 +32,9 @@ class USAModel(LightningModule):
     def training_step(self, batch, batch_idx, optimizer_idx):
         desc, code = batch["desc"], batch["code"]
         desc_repr, code_repr = self(desc, code)
+
+        print(f"batch_idx: {batch_idx}, optimizer_idx: {optimizer_idx}")
+
         if optimizer_idx == 0:
             # loss concerning desc_encoder
             train_loss = self.loss(desc_repr, code_repr)
